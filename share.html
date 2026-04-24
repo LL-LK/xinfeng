@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红色记忆 - 分享二维码</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #8B0000 0%, #C41E3A 50%, #8B0000 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #F5F0E6;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .title {
+            color: #8B0000;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .qrcode-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .qrcode-placeholder {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: #f0f0f0;
+            border: 2px dashed #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .qrcode-placeholder .star {
+            font-size: 48px;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .links {
+            margin-top: 20px;
+        }
+        
+        .link-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+        }
+        
+        .link-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        
+        .link-url {
+            font-size: 14px;
+            color: #C41E3A;
+            word-break: break-all;
+            text-align: left;
+        }
+        
+        .tips {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #FFD700;
+        }
+        
+        .tips-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8B0000;
+            margin-bottom: 8px;
+        }
+        
+        .tips-content {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.8;
+            text-align: left;
+        }
+        
+        .decoration {
+            margin-top: 30px;
+            color: rgba(255,215,0,0.5);
+            font-size: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
+            color: #FFD700;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(196,30,58,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔴 红色记忆</h1>
+        <p class="subtitle">抗日旅游 H5 互动项目</p>
+        
+        <div class="qrcode-container">
+            <div class="qrcode-placeholder">
+                <span class="star">★</span>
+                <span>扫码访问项目</span>
+                <span style="font-size:12px;margin-top:5px;">(需先生成二维码)</span>
+            </div>
+        </div>
+        
+        <div class="links">
+            <div class="link-item">
+                <div class="link-label">🌐 预览地址（本地）</div>
+                <div class="link-url">http://localhost:4173/</div>
+            </div>
+            <div class="link-item">
+                <div class="link-label">📡 预览地址（局域网）</div>
+                <div class="link-url">http://172.18.80.159:4173/</div>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="openProject()">立即体验项目 →</button>
+        
+        <div class="tips">
+            <div class="tips-title">📖 如何生成二维码分享？</div>
+            <div class="tips-content">
+                1. 复制上方链接<br>
+                2. 访问 https://cli.im/ 或其他二维码生成工具<br>
+                3. 粘贴链接生成二维码<br>
+                4. 保存二维码图片分享给朋友
+            </div>
+        </div>
+        
+        <div class="decoration">
+            ★ ★ ★ ★ ★
+        </div>
+    </div>
+
+    <script>
+        function openProject() {
+            window.open('http://localhost:4173/', '_blank');
+        }
+    </script>
+</body>
+</html>

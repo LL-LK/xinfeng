@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>红色记忆 - 抗日旅游H5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #C41E3A;
+            --color-primary-dark: #8B0000;
+            --color-secondary-gold: #FFD700;
+            --color-secondary-yellow: #FFC107;
+            --color-secondary-green: #4A5D23;
+            --color-secondary-blue: #1E3A5F;
+            --color-secondary-red: #8B2500;
+            --color-secondary-cyan: #2E8B57;
+            --color-secondary-black: #1A1A1A;
+            --color-white: #FFFFFF;
+            --color-offwhite: #F5F0E6;
+            --color-paper: #F0E6D2;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--color-offwhite);
+            font-family: SimSun, 'Songti SC', serif;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 750px;
+            height: 100%;
+            max-height: 1334px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 信封屏幕样式 */
+        .envelope-screen {
+            background: linear-gradient(135deg, #8B0000 0%, #C41E3A 50%, #8B0000 100%);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .title-section {
+            position: absolute;
+            top: 40px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .title-section h1 {
+            color: #FFD700;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 8px;
+        }
+
+        .title-section p {
+            color: #F5F0E6;
+            font-size: 16px;
+            margin-top: 10px;
+            letter-spacing: 4px;
+        }
+
+        .envelopes-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .top-row, .bottom-row {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            perspective: 1000px;
+            transition: all 0.5s ease;
+        }
+
+        .envelope-container.fading {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .envelope-container.selected {
+            transform: scale(1.5);
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-primary);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background-color: inherit;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .envelope-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: inherit;
+            border: 3px solid rgba(139, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        .seal-btn {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #FFD700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #B8860B;
+            transition: all 0.3s ease;
+        }
+
+        .seal-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 4px 15px rgba(255,215,0,0.5);
+        }
+
+        .seal-btn span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #8B0000;
+        }
+
+        .envelope-title {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #FFD700;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 3;
+        }
+
+        .decorations {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            gap: 20px;
+            color: rgba(255,215,0,0.3);
+            font-size: 24px;
+        }
+
+        /* 视频屏幕样式 */
+        .video-screen {
+            background: linear-gradient(180deg, #1A1A1A 0%, #333333 100%);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .video-placeholder {
+            width: 90%;
+            height: 60%;
+            background-color: #000;
+            border: 4px solid #FFD700;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .video-placeholder .title {
+            color: #FFD700;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .video-placeholder .subtitle {
+            color: #F5F0E6;
+            font-size: 16px;
+            text-align: center;
+            padding: 0 30px;
+            line-height: 1.8;
+        }
+
+        .video-placeholder .loading {
+            position: absolute;
+            bottom: 30px;
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        .video-screen .hint {
+            margin-top: 40px;
+            color: #F5F0E6;
+            font-size: 14px;
+        }
+
+        /* 选择屏幕样式 */
+        .choice-screen {
+            background: linear-gradient(180deg, #2C1810 0%, #4A2820 100%);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .scenario-text {
+            color: #FFD700;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            max-width: 90%;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .choice-btn {
+            padding: 20px 30px;
+            color: #FFFFFF;
+            border: 3px solid #FFD700;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .choice-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(255,215,0,0.3);
+        }
+
+        .choice-btn .content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .choice-btn .label {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            min-width: 30px;
+        }
+
+        .choice-btn .strategy-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .choice-btn .strategy-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .choice-screen .hint {
+            margin-top: 40px;
+            color: #F5F0E6;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* 书信屏幕样式 */
+        .letter-screen {
+            background: linear-gradient(180deg, #F0E6D2 0%, #D4C4A8 100%);
+            flex-direction: column;
+            padding: 30px 20px;
+        }
+
+        .letter-paper {
+            flex: 1;
+            background: #F5F0E6;
+            padding: 30px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            border: 1px solid #D4C4A8;
+            position: relative;
+            overflow-y: auto;
+            animation: unfold 0.8s ease;
+        }
+
+        @keyframes unfold {
+            from {
+                transform: scale(0.8) rotate(-5deg);
+            }
+            to {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #C41E3A;
+        }
+
+        .letter-header h2 {
+            color: #C41E3A;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .letter-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .letter-content {
+            margin-bottom: 20px;
+        }
+
+        .letter-content label,
+        .letter-input-section label,
+        .signature-section label {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .letter-content .choice-text {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.8;
+            padding: 15px 20px;
+            background-color: rgba(196, 30, 58, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #C41E3A;
+        }
+
+        .letter-input-section, .signature-section {
+            margin-bottom: 20px;
+        }
+
+        .letter-input-section textarea,
+        .signature-section input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .letter-input-section textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
+            color: #FFD700;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5);
+        }
+
+        /* 盖章屏幕样式 */
+        .stamp-screen {
+            background: linear-gradient(180deg, #F0E6D2 0%, #D4C4A8 100%);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .thank-you-message {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .thank-you-message h2 {
+            color: #C41E3A;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .thank-you-message p {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .final-envelope {
+            width: 280px;
+            height: 200px;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .final-envelope .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background-color: inherit;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            z-index: 2;
+        }
+
+        .stamp {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #C41E3A;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFD700;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border: 4px solid #FFD700;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 10;
+            animation: stampDown 0.8s ease forwards;
+        }
+
+        @keyframes stampDown {
+            0% {
+                transform: translateY(-100px) rotate(-10deg);
+                opacity: 0.8;
+            }
+            70% {
+                transform: translateY(10px);
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stamp-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stamp-content .star {
+            font-size: 16px;
+        }
+
+        .stamp-content .name {
+            font-size: 14px;
+        }
+
+        .stamp-content .memorial {
+            font-size: 12px;
+        }
+
+        .ink-splash {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: #C41E3A;
+            border-radius: 50%;
+            z-index: 1;
+            animation: inkSpread 0.8s ease forwards;
+        }
+
+        @keyframes inkSpread {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1.5);
+                opacity: 0.3;
+            }
+        }
+
+        .restart-btn {
+            margin-top: 50px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+            color: #8B0000;
+            border: 2px solid #C41E3A;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .decorative-stars {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            gap: 15px;
+            color: rgba(196, 30, 58, 0.3);
+            font-size: 20px;
+        }
+
+        /* 信封颜色 */
+        .env-color-0 { background-color: #C41E3A; }
+        .env-color-1 { background-color: #8B0000; }
+        .env-color-2 { background-color: #A52A2A; }
+        .env-color-3 { background-color: #CD5C5C; }
+        .env-color-4 { background-color: #DC143C; }
+
+        /* 策略颜色 */
+        .strategy-shouter { background: linear-gradient(135deg, #1E3A5F 0%, #1E3A5Fdd 100%); }
+        .strategy-lighter { background: linear-gradient(135deg, #8B2500 0%, #8B2500dd 100%); }
+        .strategy-weaver { background: linear-gradient(135deg, #2E8B57 0%, #2E8B57dd 100%); }
+        .strategy-crosser { background: linear-gradient(135deg, #FFC107 0%, #FFC107dd 100%); }
+        .strategy-hider { background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1Add 100%); }
+
+        .final-env-shouter { background-color: #1E3A5F; }
+        .final-env-lighter { background-color: #8B2500; }
+        .final-env-weaver { background-color: #2E8B57; }
+        .final-env-crosser { background-color: #FFC107; }
+        .final-env-hider { background-color: #1A1A1A; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="phone-frame">
+            <!-- 信封屏幕 -->
+            <div class="screen envelope-screen active" id="envelopeScreen">
+                <div class="title-section">
+                    <h1>红色记忆</h1>
+                    <p>点击信封开启历史时刻</p>
+                </div>
+                <div class="envelopes-container">
+                    <div class="top-row" id="topRow"></div>
+                    <div class="bottom-row" id="bottomRow"></div>
+                </div>
+                <div class="decorations">
+                    ★ ★ ★ ★ ★
+                </div>
+            </div>
+
+            <!-- 视频屏幕 -->
+            <div class="screen video-screen" id="videoScreen">
+                <div class="video-placeholder">
+                    <div class="title" id="videoTitle"></div>
+                    <div class="subtitle" id="videoSubtitle"></div>
+                    <div class="loading">视频播放中...</div>
+                </div>
+                <div class="hint">即将进入选择界面...</div>
+            </div>
+
+            <!-- 选择屏幕 -->
+            <div class="screen choice-screen" id="choiceScreen">
+                <div class="scenario-text" id="scenarioText"></div>
+                <div class="choices-container" id="choicesContainer"></div>
+                <div class="hint">每个选择都是一种正当选择</div>
+            </div>
+
+            <!-- 书信屏幕 -->
+            <div class="screen letter-screen" id="letterScreen">
+                <div class="letter-paper">
+                    <div class="letter-header">
+                        <h2 id="strategyName"></h2>
+                        <p id="strategyDesc"></p>
+                    </div>
+                    <div class="letter-content">
+                        <label>你的选择：</label>
+                        <p class="choice-text" id="choiceText"></p>
+                    </div>
+                    <div class="letter-input-section">
+                        <label>写下你的感言：</label>
+                        <textarea id="userMessage" placeholder="在这里写下你的感想..."></textarea>
+                    </div>
+                    <div class="signature-section">
+                        <label>署名：</label>
+                        <input type="text" id="userName" placeholder="请输入您的署名">
+                    </div>
+                </div>
+                <button class="submit-btn" onclick="submitLetter()">提交感言</button>
+            </div>
+
+            <!-- 盖章屏幕 -->
+            <div class="screen stamp-screen" id="stampScreen">
+                <div class="thank-you-message">
+                    <h2 id="thankYouName"></h2>
+                    <p>感谢你传承红色精神</p>
+                </div>
+                <div class="final-envelope" id="finalEnvelope">
+                    <div class="envelope-flap"></div>
+                    <div class="stamp" id="stamp">
+                        <div class="stamp-content">
+                            <span class="star">★</span>
+                            <span class="name" id="stampStrategyName"></span>
+                            <span class="memorial">纪念</span>
+                        </div>
+                    </div>
+                    <div class="ink-splash" id="inkSplash"></div>
+                </div>
+                <button class="restart-btn" onclick="restart()" id="restartBtn" style="display: none;">重新体验</button>
+                <div class="decorative-stars">
+                    ★ ★ ★ ★ ★
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 数据定义
+        const envelopeData = [
+            {
+                id: 1,
+                title: '轰炸之夜',
+                subtitle: '1939 年夏，警报响起，印刷厂在燃烧',
+                strategy: 'shouter',
+                options: [
+                    { label: 'A', text: '拆下门板当字盘，手摇印刷，确保声音传出', strategy: 'shouter' },
+                    { label: 'B', text: '组织工友维持秩序，按流程抢修设备', strategy: 'lighter' },
+                    { label: 'C', text: '联系周边印刷厂，拼凑版面，共担风险', strategy: 'weaver' }
+                ]
+            },
+            {
+                id: 2,
+                title: '剧展前夜',
+                subtitle: '1944 年 2 月，导演病倒，时局紧张，传闻日军南犯',
+                strategy: 'lighter',
+                options: [
+                    { label: 'A', text: '带病上台顶替角色，幕布按时拉开', strategy: 'lighter' },
+                    { label: 'B', text: '连夜走访其他剧团，借调演员重组剧目', strategy: 'weaver' },
+                    { label: 'C', text: '改演小型剧目，保留火种，等待转机', strategy: 'crosser' }
+                ]
+            },
+            {
+                id: 3,
+                title: '撤离时刻',
+                subtitle: '1944 年 9 月，组织命令转移，你手里有未送达的名单',
+                strategy: 'weaver',
+                options: [
+                    { label: 'A', text: '冒险折返城中，逐一登门通知', strategy: 'weaver' },
+                    { label: 'B', text: '将名单托付给可信的本地商贩，暗语传信', strategy: 'hider' },
+                    { label: 'C', text: '在城门张贴暗号，让他们自行领会撤离路线', strategy: 'crosser' }
+                ]
+            },
+            {
+                id: 4,
+                title: '沦陷之后',
+                subtitle: '1944 年 11 月 11 日，桂林陷落，你在昭平',
+                strategy: 'crosser',
+                options: [
+                    { label: 'A', text: '步行百里借油印机，复刊继续发声', strategy: 'crosser' },
+                    { label: 'B', text: '混入民间记录暴行，等待时机传递', strategy: 'hider' },
+                    { label: 'C', text: '向难民朗读新闻，口口相传，不让声音断绝', strategy: 'shouter' }
+                ]
+            },
+            {
+                id: 5,
+                title: '兴坪码头',
+                subtitle: '1945 年春，日军运粮船队经过漓江',
+                strategy: 'hider',
+                options: [
+                    { label: 'A', text: '夜袭码头，火烧粮船，以弱击强', strategy: 'hider' },
+                    { label: 'B', text: '发动渔民封锁江面，以民为网', strategy: 'weaver' },
+                    { label: 'C', text: '向桂林方向鸣枪，制造大军压境假象', strategy: 'shouter' }
+                ]
+            }
+        ];
+
+        const strategyConfig = {
+            shouter: { name: '呐喊者', description: '在信息封锁中撕开缺口' },
+            lighter: { name: '燃灯者', description: '在秩序动荡中坚守阵地' },
+            weaver: { name: '织网者', description: '在分散隔阂中凝聚力量' },
+            crosser: { name: '渡河者', description: '在道路受阻时另寻新途' },
+            hider: { name: '潜火者', description: '在严峻环境下保存火种' }
+        };
+
+        let selectedEnvelope = null;
+        let selectedOption = null;
+        let userName = '';
+
+        // 初始化信封
+        function initEnvelopes() {
+            const topRow = document.getElementById('topRow');
+            const bottomRow = document.getElementById('bottomRow');
+
+            envelopeData.forEach((envelope, index) => {
+                const container = document.createElement('div');
+                container.className = `envelope-container env-color-${index}`;
+                container.innerHTML = `
+                    <div class="envelope">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-body"></div>
+                        <button class="seal-btn" onclick="openEnvelope(${index})">
+                            <span>★</span>
+                        </button>
+                        <div class="envelope-title">${envelope.title}</div>
+                    </div>
+                `;
+
+                if (index < 3) {
+                    topRow.appendChild(container);
+                } else {
+                    bottomRow.appendChild(container);
+                }
+            });
+        }
+
+        // 打开信封
+        function openEnvelope(index) {
+            selectedEnvelope = envelopeData[index];
+            const containers = document.querySelectorAll('.envelope-container');
+            
+            containers.forEach((container, i) => {
+                if (i === index) {
+                    container.classList.add('selected');
+                } else {
+                    container.classList.add('fading');
+                }
+            });
+
+            setTimeout(() => {
+                showScreen('videoScreen');
+                document.getElementById('videoTitle').textContent = selectedEnvelope.title;
+                document.getElementById('videoSubtitle').textContent = selectedEnvelope.subtitle;
+                
+                setTimeout(() => {
+                    showScreen('choiceScreen');
+                    renderChoices();
+                }, 3000);
+            }, 800);
+        }
+
+        // 渲染选择项
+        function renderChoices() {
+            document.getElementById('scenarioText').textContent = selectedEnvelope.subtitle;
+            const container = document.getElementById('choicesContainer');
+            container.innerHTML = '';
+
+            selectedEnvelope.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = `choice-btn strategy-${option.strategy}`;
+                const config = strategyConfig[option.strategy];
+                btn.innerHTML = `
+                    <div class="content">
+                        <span class="label">${option.label}.</span>
+                        <div>
+                            <div class="strategy-name">${config.name}</div>
+                            <div class="strategy-text">${option.text}</div>
+                        </div>
+                    </div>
+                `;
+                btn.onclick = () => selectOption(option);
+                btn.style.animationDelay = `${index * 0.2}s`;
+                container.appendChild(btn);
+            });
+        }
+
+        // 选择选项
+        function selectOption(option) {
+            selectedOption = option;
+            showScreen('letterScreen');
+            const config = strategyConfig[option.strategy];
+            document.getElementById('strategyName').textContent = config.name;
+            document.getElementById('strategyDesc').textContent = config.description;
+            document.getElementById('choiceText').textContent = option.text;
+        }
+
+        // 提交书信
+        function submitLetter() {
+            const message = document.getElementById('userMessage').value;
+            userName = document.getElementById('userName').value || '匿名';
+            showScreen('stampScreen');
+            document.getElementById('thankYouName').textContent = `${userName}，你好！`;
+            document.getElementById('stampStrategyName').textContent = strategyConfig[selectedOption.strategy].name;
+            
+            const finalEnvelope = document.getElementById('finalEnvelope');
+            finalEnvelope.className = `final-envelope final-env-${selectedOption.strategy}`;
+            
+            setTimeout(() => {
+                document.getElementById('stamp').style.display = 'flex';
+                document.getElementById('inkSplash').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('restartBtn').style.display = 'block';
+                }, 800);
+            }, 1000);
+        }
+
+        // 重新开始
+        function restart() {
+            selectedEnvelope = null;
+            selectedOption = null;
+            userName = '';
+            document.getElementById('userMessage').value = '';
+            document.getElementById('userName').value = '';
+            
+            const containers = document.querySelectorAll('.envelope-container');
+            containers.forEach(container => {
+                container.classList.remove('selected', 'fading');
+            });
+            
+            document.getElementById('stamp').style.display = 'none';
+            document.getElementById('inkSplash').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+            
+            showScreen('envelopeScreen');
+        }
+
+        // 切换屏幕
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', initEnvelopes);
+    </script>
+</body>
+</html>

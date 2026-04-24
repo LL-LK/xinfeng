@@ -1,0 +1,141 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import Envelope from './Envelope';
+import { EnvelopeData } from '../types';
+import { envelopeData } from '../data';
+
+interface EnvelopeScreenProps {
+  onEnvelopeClick: (data: EnvelopeData) => void;
+  selectedEnvelope: EnvelopeData | null;
+}
+
+const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, selectedEnvelope }) => {
+  const topRowEnvelopes = envelopeData.slice(0, 3);
+  const bottomRowEnvelopes = envelopeData.slice(3, 5);
+
+  return (
+    <motion.div
+      className="envelope-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(180deg, #5C0000 0%, #8B0000 50%, #5C0000 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        padding: '20px 10px'
+      }}
+    >
+      <div
+        className="title-section"
+        style={{
+          textAlign: 'center',
+          zIndex: 10,
+          marginBottom: '20px'
+        }}
+      >
+        <motion.h1
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 1 }}
+          style={{
+            color: '#FFD700',
+            fontSize: 'clamp(24px, 5vw, 36px)',
+            fontWeight: 'bold',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+            letterSpacing: 8
+          }}
+        >
+          红色记忆
+        </motion.h1>
+        <motion.p
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          style={{
+            color: '#F5F0E6',
+            fontSize: 'clamp(12px, 3vw, 18px)',
+            marginTop: 10,
+            letterSpacing: 4
+          }}
+        >
+          点击信封开启历史时刻
+        </motion.p>
+      </div>
+
+      <div
+        className="envelopes-container"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '20px',
+          flex: 1,
+          justifyContent: 'center'
+        }}
+      >
+        <div
+          className="top-row"
+          style={{
+            display: 'flex',
+            gap: '15px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}
+        >
+          {topRowEnvelopes.map((envelope, index) => (
+            <Envelope
+              key={envelope.id}
+              data={envelope}
+              index={index}
+              onClick={() => onEnvelopeClick(envelope)}
+              isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
+              isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
+            />
+          ))}
+        </div>
+
+        <div
+          className="bottom-row"
+          style={{
+            display: 'flex',
+            gap: '15px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}
+        >
+          {bottomRowEnvelopes.map((envelope, index) => (
+            <Envelope
+              key={envelope.id}
+              data={envelope}
+              index={index + 3}
+              onClick={() => onEnvelopeClick(envelope)}
+              isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
+              isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div
+        className="decorations"
+        style={{
+          display: 'flex',
+          gap: 20,
+          color: 'rgba(255,215,0,0.3)',
+          fontSize: 'clamp(16px, 4vw, 28px)',
+          marginTop: '20px'
+        }}
+      >
+        ★ ★ ★ ★ ★
+      </div>
+    </motion.div>
+  );
+};
+
+export default EnvelopeScreen;
