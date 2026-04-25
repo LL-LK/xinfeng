@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { EnvelopeData } from '../types';
+import ProgressiveImage from './ProgressiveImage';
 
 interface EnvelopeProps {
   data: EnvelopeData;
@@ -34,7 +35,7 @@ const Envelope: React.FC<EnvelopeProps> = ({ data, onClick, isSelected, isFading
         boxSizing: 'border-box'
       }}
     >
-      <img
+      <ProgressiveImage
         src={data.coverImage}
         alt={data.title}
         style={{

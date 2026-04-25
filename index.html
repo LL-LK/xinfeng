@@ -2,12 +2,35 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#8B0000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://xinfeng.pages.dev" />
+    <link rel="dns-prefetch" href="https://xinfeng.pages.dev" />
+    <link rel="preload" href="/assets/呐喊者/封面/d74541a4a7701c8f4f4e52618592cd1c_720.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/燃灯者/封面/c01bc64a836526742442f68577572148.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/织网者/封面/619517eed9d0e11b2f82cf159e455985.webp" as="image" type="image/webp" />
     <title>红色记忆 - 抗日旅游H5</title>
+    <style>
+      body{margin:0;padding:0;background:#000;overflow:hidden}
+      #root{width:100%;height:100vh}
+      .app-loading{position:fixed;top:0;left:0;width:100%;height:100%;background:#8B0000;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999}
+      .app-loading h1{color:#FFD700;font-size:24px;letter-spacing:8px;animation:pulse 1.5s infinite}
+      .app-loading p{color:#F5F0E6;font-size:14px;margin-top:10px;letter-spacing:4px}
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="app-loading">
+        <h1>红色记忆</h1>
+        <p>加载中...</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+{
+  "name": "红色记忆 - 抗日旅游H5",
+  "short_name": "红色记忆",
+  "description": "红色记忆 - 抗日旅游H5互动体验",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#8B0000",
+  "theme_color": "#8B0000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

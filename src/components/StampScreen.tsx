@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { EnvelopeData } from '../types';
 import { strategyConfig } from '../data';
+import ProgressiveImage from './ProgressiveImage';
 
 interface StampScreenProps {
   envelope: EnvelopeData;
@@ -101,7 +102,7 @@ const StampScreen: React.FC<StampScreenProps> = ({ envelope, userName, onRestart
         }}
       >
         {/* 第四张图片 */}
-        <img
+        <ProgressiveImage
           src={envelope.pages[3]}
           alt="纪念图片"
           style={{

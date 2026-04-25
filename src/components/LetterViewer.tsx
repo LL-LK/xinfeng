@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EnvelopeData } from '../types';
+import ProgressiveImage from './ProgressiveImage';
 
 interface LetterViewerProps {
   envelope: EnvelopeData;
@@ -60,7 +61,6 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
           position: 'relative'
         }}
       >
-        {/* 拆封动画 - 封面图片放大 */}
         {isUnfolding && (
           <motion.img
             src={envelope.coverImage}
@@ -80,14 +80,9 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
           />
         )}
 
-        <motion.img
-          key={currentPage}
+        <ProgressiveImage
           src={envelope.pages[currentPage]}
           alt={`第 ${currentPage + 1} 页`}
-          initial={{ opacity: isUnfolding ? 0 : 0, scale: isUnfolding ? 1 : 1.02 }}
-          animate={{ opacity: isUnfolding ? 0 : 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.4 }}
           style={{
             width: '100%',
             height: '100%',
@@ -97,7 +92,6 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
           }}
         />
 
-        {/* 页码指示器 */}
         <div
           style={{
             position: 'absolute',
@@ -124,7 +118,6 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
         </div>
       </div>
 
-      {/* 导航按钮 */}
       <div
         className="viewer-footer"
         style={{
