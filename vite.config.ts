@@ -19,11 +19,22 @@ export default defineConfig({
         pure_funcs: ['console.log']
       }
     },
+    modulePreload: {
+      polyfill: false
+    },
+    cssTarget: 'chrome61',
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'framer-motion': ['framer-motion']
+        manualChunks(id: string) {
+          if (id.indexOf('node_modules') > -1) {
+            if (id.indexOf('react') > -1 || id.indexOf('react-dom') > -1) {
+              return 'react-vendor';
+            }
+            if (id.indexOf('framer-motion') > -1) {
+              return 'framer-motion';
+            }
+            return 'vendor';
+          }
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
@@ -33,6 +44,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 500,
     cssCodeSplit: true,
     sourcemap: false,
-    reportCompressedSize: true
+    reportCompressedSize: false
   }
 })

@@ -11,16 +11,16 @@ interface EnvelopeProps {
   isFading: boolean;
 }
 
-const Envelope: React.FC<EnvelopeProps> = ({ data, onClick, isSelected, isFading }) => {
+const Envelope: React.FC<EnvelopeProps> = React.memo(({ data, onClick, isSelected, isFading }) => {
   return (
     <motion.div
       className="cover-image"
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={false}
       animate={{
         opacity: isFading ? 0 : 1,
         scale: isSelected ? 1.3 : 1
       }}
-      transition={{ duration: 0.8, type: 'spring' }}
+      transition={{ duration: 0.5, type: 'tween' }}
       onClick={onClick}
       style={{
         position: 'relative',
@@ -32,7 +32,11 @@ const Envelope: React.FC<EnvelopeProps> = ({ data, onClick, isSelected, isFading
         borderRadius: '12px',
         border: '4px solid #FFD700',
         overflow: 'hidden',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        willChange: 'transform, opacity',
+        contain: 'layout style paint',
+        WebkitTapHighlightColor: 'transparent',
+        touchAction: 'manipulation'
       }}
     >
       <ProgressiveImage
@@ -53,6 +57,8 @@ const Envelope: React.FC<EnvelopeProps> = ({ data, onClick, isSelected, isFading
       />
     </motion.div>
   );
-};
+});
+
+Envelope.displayName = 'Envelope';
 
 export default Envelope;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { EnvelopeData } from '../types';
 import ProgressiveImage from './ProgressiveImage';
@@ -8,7 +8,7 @@ interface LetterViewerProps {
   onComplete: () => void;
 }
 
-const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => {
+const LetterViewer: React.FC<LetterViewerProps> = React.memo(({ envelope, onComplete }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isUnfolding, setIsUnfolding] = useState(true);
   const totalPages = envelope.pages.length;
@@ -16,38 +16,38 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsUnfolding(false);
-    }, 1000);
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
+      setCurrentPage(prev => prev + 1);
     } else {
       onComplete();
     }
-  };
+  }, [currentPage, totalPages, onComplete]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage(prev => prev - 1);
     }
-  };
+  }, [currentPage]);
 
   return (
     <motion.div
       className="letter-viewer"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
       style={{
         width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#000',
-        position: 'relative'
+        position: 'relative',
+        contain: 'layout style paint'
       }}
     >
       <div
@@ -67,7 +67,7 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
             alt={envelope.title}
             initial={{ scale: 0.8, opacity: 1 }}
             animate={{ scale: 2.5, opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6, type: 'tween' }}
             style={{
               position: 'absolute',
               width: 'clamp(200px, 60vw, 300px)',
@@ -75,7 +75,8 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
               borderRadius: '12px',
               objectFit: 'cover',
               zIndex: 20,
-              boxShadow: '0 20px 60px rgba(0,0,0,0.6)'
+              boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+              willChange: 'transform, opacity'
             }}
           />
         )}
@@ -111,7 +112,7 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
                 height: 8,
                 borderRadius: 4,
                 backgroundColor: index === currentPage ? '#FFD700' : 'rgba(255,255,255,0.3)',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.2s ease'
               }}
             />
           ))}
@@ -126,11 +127,11 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
           justifyContent: 'space-between',
           alignItems: 'center',
           backgroundColor: 'rgba(0,0,0,0.7)',
-          gap: '20px'
+          gap: '20px',
+          touchAction: 'manipulation'
         }}
       >
         <motion.button
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handlePrev}
           disabled={currentPage === 0}
@@ -143,7 +144,9 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
             fontSize: '15px',
             fontWeight: 'bold',
             cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
-            minWidth: '90px'
+            minWidth: '90px',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
           }}
         >
           上一页
@@ -160,7 +163,6 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleNext}
           style={{
@@ -172,7 +174,9 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
             fontSize: '15px',
             fontWeight: 'bold',
             cursor: 'pointer',
-            minWidth: '90px'
+            minWidth: '90px',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
           }}
         >
           {currentPage === totalPages - 1 ? '完成阅读' : '下一页'}
@@ -180,6 +184,8 @@ const LetterViewer: React.FC<LetterViewerProps> = ({ envelope, onComplete }) => 
       </div>
     </motion.div>
   );
-};
+});
+
+LetterViewer.displayName = 'LetterViewer';
 
 export default LetterViewer;

@@ -9,16 +9,24 @@ interface EnvelopeScreenProps {
   selectedEnvelope: EnvelopeData | null;
 }
 
-const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, selectedEnvelope }) => {
+const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeClick, selectedEnvelope }) => {
   const topRowEnvelopes = envelopeData.slice(0, 3);
   const bottomRowEnvelopes = envelopeData.slice(3, 5);
+
+  const rowStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: '30px',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    willChange: 'auto'
+  };
 
   return (
     <motion.div
       className="envelope-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.5 }}
       style={{
         width: '100%',
         height: '100%',
@@ -28,7 +36,8 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        padding: '20px 10px'
+        padding: '20px 10px',
+        contain: 'layout style paint'
       }}
     >
       <div
@@ -42,13 +51,14 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
         <motion.h1
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3, duration: 1 }}
+          transition={{ delay: 0.2, duration: 0.6, type: 'tween' }}
           style={{
             color: '#FFD700',
             fontSize: 'clamp(24px, 5vw, 36px)',
             fontWeight: 'bold',
             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-            letterSpacing: 8
+            letterSpacing: 8,
+            willChange: 'transform, opacity'
           }}
         >
           红色记忆
@@ -56,7 +66,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
         <motion.p
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
+          transition={{ delay: 0.3, duration: 0.5, type: 'tween' }}
           style={{
             color: '#F5F0E6',
             fontSize: 'clamp(12px, 3vw, 18px)',
@@ -79,15 +89,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
           justifyContent: 'center'
         }}
       >
-        <div
-          className="top-row"
-          style={{
-            display: 'flex',
-            gap: '30px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}
-        >
+        <div className="top-row" style={rowStyle}>
           {topRowEnvelopes.map((envelope, index) => (
             <Envelope
               key={envelope.id}
@@ -100,15 +102,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
           ))}
         </div>
 
-        <div
-          className="bottom-row"
-          style={{
-            display: 'flex',
-            gap: '30px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}
-        >
+        <div className="bottom-row" style={rowStyle}>
           {bottomRowEnvelopes.map((envelope, index) => (
             <Envelope
               key={envelope.id}
@@ -136,6 +130,8 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
       </div>
     </motion.div>
   );
-};
+});
+
+EnvelopeScreen.displayName = 'EnvelopeScreen';
 
 export default EnvelopeScreen;

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { AppState, EnvelopeData } from './types';
 import EnvelopeScreen from './components/EnvelopeScreen';
-import LetterViewer from './components/LetterViewer';
-import LetterScreen from './components/LetterScreen';
-import StampScreen from './components/StampScreen';
+
+const LetterViewer = lazy(() => import('./components/LetterViewer'));
+const LetterScreen = lazy(() => import('./components/LetterScreen'));
+const StampScreen = lazy(() => import('./components/StampScreen'));
 
 function App() {
   const [state, setState] = useState<AppState>({
@@ -13,7 +14,7 @@ function App() {
     userName: ''
   });
 
-  const handleEnvelopeClick = (envelope: EnvelopeData) => {
+  const handleEnvelopeClick = useCallback((envelope: EnvelopeData) => {
     setState(prev => ({
       ...prev,
       selectedEnvelope: envelope
@@ -25,32 +26,32 @@ function App() {
         currentScreen: 'viewer'
       }));
     }, 800);
-  };
+  }, []);
 
-  const handleViewerComplete = () => {
+  const handleViewerComplete = useCallback(() => {
     setState(prev => ({
       ...prev,
       currentScreen: 'letter'
     }));
-  };
+  }, []);
 
-  const handleSubmitLetter = (message: string, name: string) => {
+  const handleSubmitLetter = useCallback((message: string, name: string) => {
     setState(prev => ({
       ...prev,
       userMessage: message,
       userName: name,
       currentScreen: 'stamp'
     }));
-  };
+  }, []);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     setState({
       currentScreen: 'envelopes',
       selectedEnvelope: null,
       userMessage: '',
       userName: ''
     });
-  };
+  }, []);
 
   return (
     <div
@@ -63,7 +64,9 @@ function App() {
         alignItems: 'center',
         backgroundColor: '#000',
         margin: 0,
-        padding: 0
+        padding: 0,
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent'
       }}
     >
       <div
@@ -73,7 +76,8 @@ function App() {
           maxWidth: 750,
           height: '100%',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          contain: 'layout style paint'
         }}
       >
         {state.currentScreen === 'envelopes' && (
@@ -84,25 +88,31 @@ function App() {
         )}
 
         {state.currentScreen === 'viewer' && state.selectedEnvelope && (
-          <LetterViewer
-            envelope={state.selectedEnvelope}
-            onComplete={handleViewerComplete}
-          />
+          <Suspense fallback={<div style={{width:'100%',height:'100%',background:'#000',display:'flex',justifyContent:'center',alignItems:'center',color:'#FFD700'}}>加载中...</div>}>
+            <LetterViewer
+              envelope={state.selectedEnvelope}
+              onComplete={handleViewerComplete}
+            />
+          </Suspense>
         )}
 
         {state.currentScreen === 'letter' && state.selectedEnvelope && (
-          <LetterScreen
-            envelope={state.selectedEnvelope}
-            onSubmit={handleSubmitLetter}
-          />
+          <Suspense fallback={<div style={{width:'100%',height:'100%',background:'#F0E6D2',display:'flex',justifyContent:'center',alignItems:'center',color:'#C41E3A'}}>加载中...</div>}>
+            <LetterScreen
+              envelope={state.selectedEnvelope}
+              onSubmit={handleSubmitLetter}
+            />
+          </Suspense>
         )}
 
         {state.currentScreen === 'stamp' && state.selectedEnvelope && (
-          <StampScreen
-            envelope={state.selectedEnvelope}
-            userName={state.userName}
-            onRestart={handleRestart}
-          />
+          <Suspense fallback={<div style={{width:'100%',height:'100%',background:'#F0E6D2',display:'flex',justifyContent:'center',alignItems:'center',color:'#C41E3A'}}>加载中...</div>}>
+            <StampScreen
+              envelope={state.selectedEnvelope}
+              userName={state.userName}
+              onRestart={handleRestart}
+            />
+          </Suspense>
         )}
       </div>
     </div>
