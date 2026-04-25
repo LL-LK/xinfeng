@@ -90,27 +90,24 @@ const StampScreen: React.FC<StampScreenProps> = ({ envelope, userName, onRestart
         className="final-envelope"
         style={{
           width: 280,
-          height: 200,
-          backgroundColor: config.color,
+          height: 400,
           borderRadius: 10,
           position: 'relative',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+          overflow: 'hidden'
         }}
       >
-        <div
-          className="envelope-flap"
+        {/* 第四张图片 */}
+        <img
+          src={envelope.pages[3]}
+          alt="纪念图片"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '50%',
-            backgroundColor: config.color,
-            clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
-            zIndex: 2
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain'
           }}
         />
 

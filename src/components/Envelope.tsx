@@ -13,75 +13,43 @@ interface EnvelopeProps {
 const Envelope: React.FC<EnvelopeProps> = ({ data, onClick, isSelected, isFading }) => {
   return (
     <motion.div
-      className="envelope-container"
+      className="cover-image"
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{
         opacity: isFading ? 0 : 1,
         scale: isSelected ? 1.3 : 1
       }}
       transition={{ duration: 0.8, type: 'spring' }}
+      onClick={onClick}
       style={{
         position: 'relative',
         width: 'clamp(120px, 28vw, 200px)',
-        aspectRatio: '3/4',
-        perspective: 1000
+        height: 'clamp(160px, 37vw, 267px)',
+        cursor: 'pointer',
+        padding: 0,
+        margin: 0,
+        borderRadius: '12px',
+        border: '4px solid #FFD700',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
       }}
     >
-      <div
-        className="envelope"
-        onClick={onClick}
+      <img
+        src={data.coverImage}
+        alt={data.title}
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '12px',
-          position: 'relative',
-          boxShadow: '0 8px 25px rgba(0,0,0,0.5)',
-          cursor: 'pointer',
-          overflow: 'hidden',
-          border: '3px solid #FFD700'
+          objectFit: 'cover',
+          objectPosition: 'center',
+          display: 'block',
+          padding: 0,
+          margin: 0
         }}
-      >
-        <img
-          src={data.coverImage}
-          alt={data.title}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          }}
-        />
-
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.8) 100%)',
-            pointerEvents: 'none'
-          }}
-        />
-
-        <div
-          className="envelope-title"
-          style={{
-            position: 'absolute',
-            bottom: '15px',
-            left: 0,
-            right: 0,
-            textAlign: 'center',
-            color: '#FFD700',
-            fontSize: 'clamp(14px, 3.5vw, 20px)',
-            fontWeight: 'bold',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
-            zIndex: 3,
-            padding: '0 10px'
-          }}
-        >
-          {data.title}
-        </div>
-      </div>
+      />
     </motion.div>
   );
 };

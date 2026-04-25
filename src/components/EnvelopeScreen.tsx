@@ -22,7 +22,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
       style={{
         width: '100%',
         height: '100%',
-        background: 'linear-gradient(180deg, #5C0000 0%, #8B0000 50%, #5C0000 100%)',
+        background: '#8B0000',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -83,7 +83,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
           className="top-row"
           style={{
             display: 'flex',
-            gap: '15px',
+            gap: '30px',
             justifyContent: 'center',
             flexWrap: 'wrap'
           }}
@@ -104,7 +104,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({ onEnvelopeClick, select
           className="bottom-row"
           style={{
             display: 'flex',
-            gap: '15px',
+            gap: '30px',
             justifyContent: 'center',
             flexWrap: 'wrap'
           }}

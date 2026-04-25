@@ -10,7 +10,7 @@ export interface EnvelopeData {
 }
 
 export interface AppState {
-  currentScreen: 'envelopes' | 'viewer' | 'letter' | 'stamp';
+  currentScreen: 'envelopes' | 'unfolding' | 'viewer' | 'letter' | 'stamp';
   selectedEnvelope: EnvelopeData | null;
   userMessage: string;
   userName: string;

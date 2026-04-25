@@ -19,7 +19,7 @@ export const envelopeData: EnvelopeData[] = [
     title: '燃灯者',
     subtitle: '在秩序动荡中坚守阵地',
     strategy: 'lighter',
-    coverImage: '/assets/燃灯者/封面/74e29cf2f34ba2b870f6b1ff7ca9c7cf.png',
+    coverImage: '/assets/燃灯者/封面/c01bc64a836526742442f68577572148.png',
     pages: [
       '/assets/燃灯者/第一页/5d2a9c80aa89b7fa988a4ccb055665ea_720.png',
       '/assets/燃灯者/第二页/c8392b51811c4f59e1165ef9efe823fd_720.png',
@@ -32,7 +32,7 @@ export const envelopeData: EnvelopeData[] = [
     title: '织网者',
     subtitle: '在分散隔阂中凝聚力量',
     strategy: 'weaver',
-    coverImage: '/assets/织网者/封面/1a64e36020f52dd16bbde6a55bb61647_720.png',
+    coverImage: '/assets/织网者/封面/619517eed9d0e11b2f82cf159e455985.jpg',
     pages: [
       '/assets/织网者/第一页/90a3153c42b1fb282df85cf3b8fedbda_720.png',
       '/assets/织网者/第二页/e11f6654e344852bb67dadf1234318bf_720.png',
