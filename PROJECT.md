@@ -423,7 +423,7 @@ npm run preview
 
 ## 十四、快速修改清单
 
-| 想修改什么    | 修改哪个文件                              | 搜索关键词                                |
+| 想修改什么 | 修改哪个文件| 搜索关键词|
 | -------- | ----------------------------------- | ------------------------------------ |
 | 信封标题/副标题 | `src/data.ts`                       | `title`, `subtitle`                  |
 | 策略名称/颜色  | `src/data.ts`                       | `strategyConfig`                     |
@@ -433,7 +433,7 @@ npm run preview
 | 按钮文字     | 各组件文件                               | `提交感言`, `重新体验`, `上一页`, `下一页`, `完成阅读` |
 | 输入框提示    | `src/components/LetterScreen.tsx`   | `placeholder`                        |
 | 感谢语      | `src/components/StampScreen.tsx`    | `感谢你传承红色精神`                          |
-| 背景颜色     | 各组件文件                               | `background:`                        |
+| 背景颜色 | 各组件文件                             | `background:`                        |
 
 ***
 
@@ -442,9 +442,11 @@ npm run preview
 ### 方案一：本地预览分享（局域网内）
 
 1. 确保开发服务器正在运行：
+
    ```bash
    npm run dev
    ```
+
 2. 在同一局域网内的设备可访问：
    - **本地地址**：<http://localhost:3000/>
    - **网络地址**：查看控制台输出
