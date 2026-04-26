@@ -15,10 +15,19 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeCl
 
   const rowStyle: React.CSSProperties = {
     display: 'flex',
-    gap: '30px',
+    gap: '15px',
     justifyContent: 'center',
-    flexWrap: 'wrap',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    marginBottom: '15px',
     willChange: 'auto'
+  };
+
+  const envelopeWrapperStyle: React.CSSProperties = {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   };
 
   return (
@@ -36,7 +45,7 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeCl
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        padding: '20px 10px',
+        padding: '15px',
         contain: 'layout style paint'
       }}
     >
@@ -45,33 +54,38 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeCl
         style={{
           textAlign: 'center',
           zIndex: 10,
-          marginBottom: '20px'
+          marginBottom: '25px',
+          paddingLeft: '20px',
+          paddingRight: '20px'
         }}
       >
         <motion.h1
-          initial={{ y: -50, opacity: 0 }}
+          initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6, type: 'tween' }}
           style={{
             color: '#FFD700',
-            fontSize: 'clamp(24px, 5vw, 36px)',
+            fontSize: 'clamp(24px, 6vw, 36px)',
             fontWeight: 'bold',
             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-            letterSpacing: 8,
+            letterSpacing: 6,
+            margin: 0,
+            lineHeight: '1.2',
             willChange: 'transform, opacity'
           }}
         >
           红色记忆
         </motion.h1>
         <motion.p
-          initial={{ y: -30, opacity: 0 }}
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5, type: 'tween' }}
           style={{
             color: '#F5F0E6',
-            fontSize: 'clamp(12px, 3vw, 18px)',
-            marginTop: 10,
-            letterSpacing: 4
+            fontSize: 'clamp(12px, 3vw, 16px)',
+            marginTop: 8,
+            letterSpacing: 3,
+            margin: 0
           }}
         >
           点击信封开启历史时刻
@@ -84,34 +98,44 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeCl
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '20px',
+          gap: '15px',
           flex: 1,
-          justifyContent: 'center'
+          justifyContent: 'center',
+          width: '100%',
+          maxWidth: 600
         }}
       >
+        {/* 上排：3个信封 */}
         <div className="top-row" style={rowStyle}>
           {topRowEnvelopes.map((envelope, index) => (
-            <Envelope
-              key={envelope.id}
-              data={envelope}
-              index={index}
-              onClick={() => onEnvelopeClick(envelope)}
-              isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
-              isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
-            />
+            <div key={envelope.id} style={envelopeWrapperStyle}>
+              <Envelope
+                data={envelope}
+                index={index}
+                onClick={() => onEnvelopeClick(envelope)}
+                isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
+                isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
+              />
+            </div>
           ))}
         </div>
 
-        <div className="bottom-row" style={rowStyle}>
+        {/* 下排：2个信封 */}
+        <div className="bottom-row" style={{
+          ...rowStyle,
+          marginBottom: 0,
+          gap: '30px'
+        }}>
           {bottomRowEnvelopes.map((envelope, index) => (
-            <Envelope
-              key={envelope.id}
-              data={envelope}
-              index={index + 3}
-              onClick={() => onEnvelopeClick(envelope)}
-              isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
-              isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
-            />
+            <div key={envelope.id} style={envelopeWrapperStyle}>
+              <Envelope
+                data={envelope}
+                index={index + 3}
+                onClick={() => onEnvelopeClick(envelope)}
+                isSelected={!!selectedEnvelope && selectedEnvelope.id === envelope.id}
+                isFading={!!selectedEnvelope && selectedEnvelope.id !== envelope.id}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -120,10 +144,10 @@ const EnvelopeScreen: React.FC<EnvelopeScreenProps> = React.memo(({ onEnvelopeCl
         className="decorations"
         style={{
           display: 'flex',
-          gap: 20,
+          gap: 15,
           color: 'rgba(255,215,0,0.3)',
-          fontSize: 'clamp(16px, 4vw, 28px)',
-          marginTop: '20px'
+          fontSize: 'clamp(14px, 3vw, 24px)',
+          marginTop: '25px'
         }}
       >
         ★ ★ ★ ★ ★
