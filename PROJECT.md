@@ -316,6 +316,7 @@ pages: [
 
 **文件**: [src/components/EnvelopeScreen.tsx](file:///f:/红旅/xinfeng/src/components/EnvelopeScreen.tsx)
 
+{% raw %}
 ```typescript
 // 修改背景样式
 style={{
@@ -328,6 +329,7 @@ style={{
   // backgroundPosition: 'center',
 }}
 ```
+{% endraw %}
 
 ***
 
